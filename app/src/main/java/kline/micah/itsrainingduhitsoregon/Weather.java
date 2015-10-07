@@ -2,6 +2,8 @@ package kline.micah.itsrainingduhitsoregon;
 
 /**
  * Created by desktop on 9/28/2015.
+ * This class holds weather data that should be retieved from api.openweathermap.org
+ * TODO Extend class to hold current weather data as well
  */
 public class Weather {
 

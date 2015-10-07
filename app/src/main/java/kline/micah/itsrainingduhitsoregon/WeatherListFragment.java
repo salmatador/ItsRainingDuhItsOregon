@@ -1,6 +1,9 @@
 package kline.micah.itsrainingduhitsoregon;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,16 +70,28 @@ public class WeatherListFragment extends Fragment {
         });
 
 
-        GetWeatherData getWeatherJsonData = new GetWeatherData("97338");
+        GetWeatherData getWeatherJsonData = new GetWeatherData("DALLAS,OR,US");
 
         getWeatherJsonData.buildForecastURL();
-        //getWeatherJsonData.buildCurrentWeatherUrl();
 
-        getWeatherJsonData.execute();
-        //FetchWeather fetchWeather = new FetchWeather();
-        //fetchWeather.execute();
+        if (networkConnection()) {
+            getWeatherJsonData.execute();
+        } else {
+            Toast.makeText(
+                    getContext(),
+                    R.string.no_network_toast_text,
+                    Toast.LENGTH_LONG)
+                    .show();
+        }
 
         return root;
+    }
+
+    private boolean networkConnection() {
+        //TODO Update method to not use Depriciated Methods if available
+        ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED;
     }
 
     public class GetWeatherData extends GetWeatherJsonData {

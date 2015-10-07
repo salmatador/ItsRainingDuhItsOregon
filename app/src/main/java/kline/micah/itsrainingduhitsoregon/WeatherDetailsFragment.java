@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 /**
- * A placeholder fragment containing a simple view.
+ * TODO Use a View Pager to allow swiping from one day to the next
  */
 public class WeatherDetailsFragment extends Fragment {
 
