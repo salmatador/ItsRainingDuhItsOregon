@@ -93,7 +93,7 @@ public class GetData {
 
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    buffer.append(line + "\n");
+                    buffer.append(line);
                 }
 
                 return buffer.toString();

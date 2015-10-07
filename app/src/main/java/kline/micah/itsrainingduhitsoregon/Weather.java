@@ -27,9 +27,17 @@ public class Weather {
         return Math.round(mMaxTemp);
     }
 
+    public double getMinTempF() {
+        return Math.round((mMinTemp * 1.8) + 32);
+    }
+
+    public double getMaxTempF() {
+        return Math.round((mMaxTemp * 1.8) + 32);
+    }
+
     @Override
     public String toString() {
-        return getMainWeather() + " - " + getMaxTemp() + " - " + getMinTemp();
+        return getMainWeather() + " - " + getMaxTempF() + " - " + getMinTempF();
     }
 
 }
