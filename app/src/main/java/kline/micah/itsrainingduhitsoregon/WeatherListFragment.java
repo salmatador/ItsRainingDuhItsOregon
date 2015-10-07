@@ -58,8 +58,6 @@ public class WeatherListFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Weather weather = mWeatherList.get(position);
 
-                //String intentExtra = mArrayAdapter.getItem(position).toString();
-
                 Intent newIntent = new Intent(getContext(), WeatherDetailsActivity.class);
                 newIntent.putExtra(HIGH_TEMP, weather.getMaxTempF());
                 newIntent.putExtra(LOW_TEMP, weather.getMinTempF());
@@ -114,7 +112,7 @@ public class WeatherListFragment extends Fragment {
                 for (Weather string : getWeatherList()) {
                     mArrayAdapter.add(string.toString());
                 }
-                //mArrayAdapter.add(getWeatherList());
+
             }
 
             @Override
