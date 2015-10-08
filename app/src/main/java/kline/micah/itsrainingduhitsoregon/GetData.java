@@ -10,28 +10,19 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by desktop on 9/28/2015.
- */
-enum DownloadStatus {
-    IDLE, PROCESSES, NOT_INITALIZED, FAILED_OR_EMPTY, OK
-}
-
 public class GetData {
 
     private static final String LOG_TAG = GetData.class.getSimpleName();
 
     private String mUrl;
     private String mData;
-    private DownloadStatus mDownloadStatus;
+
 
     public GetData(String url) {
         mUrl = url;
-        mDownloadStatus = DownloadStatus.IDLE;
     }
 
     public void reset() {
-        mDownloadStatus = DownloadStatus.IDLE;
         mUrl = null;
         mData = null;
     }
@@ -40,12 +31,9 @@ public class GetData {
         return mData;
     }
 
-    public DownloadStatus getDownloadStatus() {
-        return mDownloadStatus;
-    }
 
     public void execute() {
-        mDownloadStatus = DownloadStatus.PROCESSES;
+
         DownloadData downloadData = new DownloadData();
         downloadData.execute(mUrl);
     }
@@ -57,14 +45,17 @@ public class GetData {
             Log.v(LOG_TAG, mData);
             if (mData == null) {
                 if (mUrl == null) {
-                    mDownloadStatus = DownloadStatus.NOT_INITALIZED;
+                    Log.v(LOG_TAG, "url not Initialized");
+
                 } else {
-                    mDownloadStatus = DownloadStatus.FAILED_OR_EMPTY;
+                    Log.v(LOG_TAG, "Failed to Download or Data is NULL");
+
                 }
             } else {
-                mDownloadStatus = DownloadStatus.OK;
+                Log.v(LOG_TAG, "STATUS_OK");
+
             }
-            Log.v(LOG_TAG, mDownloadStatus.toString());
+
         }
 
         @Override
