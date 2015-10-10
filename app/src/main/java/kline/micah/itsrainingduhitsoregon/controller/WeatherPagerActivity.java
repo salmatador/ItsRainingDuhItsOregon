@@ -1,4 +1,4 @@
-package kline.micah.itsrainingduhitsoregon;
+package kline.micah.itsrainingduhitsoregon.controller;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,10 @@ import android.support.v4.view.ViewPager;
 
 import java.util.List;
 import java.util.UUID;
+
+import kline.micah.itsrainingduhitsoregon.R;
+import kline.micah.itsrainingduhitsoregon.model.Weather;
+import kline.micah.itsrainingduhitsoregon.model.WeatherStation;
 
 public class WeatherPagerActivity extends FragmentActivity {
 

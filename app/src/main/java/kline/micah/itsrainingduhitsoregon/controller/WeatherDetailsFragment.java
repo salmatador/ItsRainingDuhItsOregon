@@ -1,4 +1,4 @@
-package kline.micah.itsrainingduhitsoregon;
+package kline.micah.itsrainingduhitsoregon.controller;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +8,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.UUID;
+
+import kline.micah.itsrainingduhitsoregon.R;
+import kline.micah.itsrainingduhitsoregon.model.Weather;
+import kline.micah.itsrainingduhitsoregon.model.WeatherStation;
 
 /**
  * TODO Use a View Pager to allow swiping from one day to the next
