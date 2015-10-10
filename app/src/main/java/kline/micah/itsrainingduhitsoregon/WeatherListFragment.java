@@ -6,15 +6,15 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,17 +22,10 @@ public class WeatherListFragment extends Fragment {
 
     private static final String LOG = WeatherListFragment.class.getSimpleName();
 
-    public static final String BASIC_WEATHER = "BASIC_WEATHER";
-    public static final String HIGH_TEMP = "HIGH_TEMP";
-    public static final String LOW_TEMP = "LOW_TEMP";
-    public static final String MAIN_WEATHER = "MAIN_WEATHER";
+    private RecyclerView mWeatherRecyclerView;
+    private WeatherAdapter mAdapter;
 
-
-    private ArrayAdapter<String> mArrayAdapter;
-
-    private List<Weather> mWeatherList;
-
-    private ListView weatherListView;
+    private boolean isEmpty = true;
 
     public WeatherListFragment() {
     }
@@ -47,33 +40,24 @@ public class WeatherListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_weather_list, container, false);
+        View root = inflater.inflate(R.layout.fragment_weather_forecast_list, container, false);
 
-        weatherListView = (ListView) root.findViewById(R.id.weather_list_view);
-        mArrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.fragment_weather_list_textview, R.id.weather_list_item, new ArrayList<String>());
-        weatherListView.setAdapter(mArrayAdapter);
+        mWeatherRecyclerView = (RecyclerView) root.findViewById(R.id.weather_recycler_view);
+        mWeatherRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        weatherListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Weather weather = mWeatherList.get(position);
-
-                Intent newIntent = new Intent(getContext(), WeatherDetailsActivity.class);
-                newIntent.putExtra(HIGH_TEMP, weather.getMaxTempF());
-                newIntent.putExtra(LOW_TEMP, weather.getMinTempF());
-                newIntent.putExtra(MAIN_WEATHER, weather.getMainWeather());
-                newIntent.putExtra(BASIC_WEATHER, weather.toString());
-                startActivity(newIntent);
-            }
-        });
-
-
+        //TODO IMPLEMENT PREFERENCE VALUE TO PROVIDE LOCATION
+        //TODO ACCESS LOCATION FROM GPS IF REQUESTED
         GetWeatherData getWeatherJsonData = new GetWeatherData("DALLAS,OR,US");
 
         getWeatherJsonData.buildForecastURL();
 
         if (networkConnection()) {
-            getWeatherJsonData.execute();
+            if (mAdapter == null) {
+                getWeatherJsonData.execute();
+                Log.v(LOG, "GETTING JSON DATA");
+            } else {
+                updateUI();
+            }
         } else {
             Toast.makeText(
                     getContext(),
@@ -85,6 +69,14 @@ public class WeatherListFragment extends Fragment {
         return root;
     }
 
+    private void updateUI() {
+        WeatherStation weatherStation = WeatherStation.get(getActivity());
+        List<Weather> weatherForecastList = weatherStation.getWeather();
+        mAdapter = new WeatherAdapter(weatherForecastList);
+        mWeatherRecyclerView.setAdapter(mAdapter);
+
+    }
+
     private boolean networkConnection() {
         //TODO Update method to not use Depriciated Methods if available
         ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -92,26 +84,86 @@ public class WeatherListFragment extends Fragment {
                 connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED;
     }
 
+    private class WeatherHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private TextView mWeatherHighTemperature;
+        private TextView mWeatherLowTemperature;
+        private TextView mWeatherDescription;
+
+        private Weather mWeather;
+
+        public WeatherHolder(View itemView) {
+            super(itemView);
+            itemView.setOnClickListener(this);
+            mWeatherHighTemperature = (TextView) itemView.findViewById(R.id.list_item_high_temp_view);
+            mWeatherLowTemperature = (TextView) itemView.findViewById(R.id.list_item_low_temp_view);
+            mWeatherDescription = (TextView) itemView.findViewById(R.id.list_item_description_view);
+
+        }
+
+        public void bindWeather(Weather weather) {
+            mWeather = weather;
+            mWeatherHighTemperature.setText(String.valueOf(mWeather.getMaxTempF()));
+            mWeatherLowTemperature.setText(String.valueOf(mWeather.getMinTempF()));
+            mWeatherDescription.setText(mWeather.getMainWeather());
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = WeatherDetailsActivity.newIntent(getActivity(), mWeather.getId());
+            startActivity(intent);
+
+        }
+    }
+
+    private class WeatherAdapter extends RecyclerView.Adapter<WeatherHolder> {
+        private List<Weather> mWeather;
+
+
+        public WeatherAdapter(List<Weather> weather) {
+            mWeather = weather;
+        }
+
+
+        @Override
+        public WeatherHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+            View view = layoutInflater
+                    .inflate(R.layout.list_item_weather, parent, false);
+            return new WeatherHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(WeatherHolder holder, int position) {
+            Weather weather = mWeather.get(position);
+            holder.bindWeather(weather);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mWeather.size();
+        }
+    }
+
     public class GetWeatherData extends GetWeatherJsonData {
+
+        public GetWeatherData(String location) {
+            super(location);
+        }
 
         public void execute() {
             WeatherData weather = new WeatherData();
             weather.execute(getUri());
         }
 
-        public GetWeatherData(String location) {
-            super(location);
-        }
-
         public class WeatherData extends DownloadWeatherData {
             @Override
             protected void onPostExecute(String resultString) {
                 super.onPostExecute(resultString);
-                mWeatherList = getWeatherList();
-                mArrayAdapter.clear();
-                for (Weather string : getWeatherList()) {
-                    mArrayAdapter.add(string.toString());
-                }
+                WeatherStation weatherStation = WeatherStation.get(getActivity());
+                weatherStation.setWeather(getWeatherList());
+                updateUI();
+
 
             }
 

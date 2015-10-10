@@ -1,5 +1,7 @@
 package kline.micah.itsrainingduhitsoregon;
 
+import java.util.UUID;
+
 /**
  * Created by desktop on 9/28/2015.
  * This class holds weather data that should be retieved from api.openweathermap.org
@@ -10,8 +12,10 @@ public class Weather {
     private String mMainWeather;
     private double mMinTemp;
     private double mMaxTemp;
+    private UUID mId;
 
     public Weather(String mainWeather, Double highTemp, Double lowTemp) {
+        mId = UUID.randomUUID();
         mMainWeather = mainWeather;
         mMaxTemp = highTemp;
         mMinTemp = lowTemp;
@@ -42,4 +46,7 @@ public class Weather {
         return getMainWeather() + " - " + getMaxTempF() + " - " + getMinTempF();
     }
 
+    public UUID getId() {
+        return mId;
+    }
 }
