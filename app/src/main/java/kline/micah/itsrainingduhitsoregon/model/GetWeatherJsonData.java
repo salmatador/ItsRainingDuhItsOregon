@@ -1,4 +1,4 @@
-package kline.micah.itsrainingduhitsoregon;
+package kline.micah.itsrainingduhitsoregon.model;
 
 
 import android.net.Uri;

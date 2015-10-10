@@ -1,4 +1,4 @@
-package kline.micah.itsrainingduhitsoregon;
+package kline.micah.itsrainingduhitsoregon.controller;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+
+import kline.micah.itsrainingduhitsoregon.R;
+import kline.micah.itsrainingduhitsoregon.model.GetWeatherJsonData;
+import kline.micah.itsrainingduhitsoregon.model.Weather;
+import kline.micah.itsrainingduhitsoregon.model.WeatherStation;
 
 
 public class WeatherListFragment extends Fragment {

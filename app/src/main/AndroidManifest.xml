@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".WeatherListActivity"
+            android:name=".controller.WeatherListActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,9 +20,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".WeatherPagerActivity"
+            android:name=".controller.WeatherPagerActivity"
             android:label="@string/title_activity_weather_pager"
-            android:parentActivityName=".WeatherListActivity">
+            android:parentActivityName=".controller.WeatherListActivity">
         </activity>
     </application>
 
