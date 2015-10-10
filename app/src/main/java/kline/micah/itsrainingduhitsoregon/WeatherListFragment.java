@@ -34,6 +34,7 @@ public class WeatherListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(false);
+        setRetainInstance(true);
     }
 
     @Override
@@ -47,9 +48,9 @@ public class WeatherListFragment extends Fragment {
 
         //TODO IMPLEMENT PREFERENCE VALUE TO PROVIDE LOCATION
         //TODO ACCESS LOCATION FROM GPS IF REQUESTED
-        GetWeatherData getWeatherJsonData = new GetWeatherData("DALLAS,OR,US");
+        GetWeatherData getWeatherJsonData = new GetWeatherData("97338");
 
-        getWeatherJsonData.buildForecastURL();
+        getWeatherJsonData.buildForecastURL(getResources().getString(R.string.weather_api_key));
 
         if (networkConnection()) {
             if (mAdapter == null) {
@@ -110,7 +111,7 @@ public class WeatherListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Intent intent = WeatherDetailsActivity.newIntent(getActivity(), mWeather.getId());
+            Intent intent = WeatherPagerActivity.newIntent(getActivity(), mWeather.getId());
             startActivity(intent);
 
         }

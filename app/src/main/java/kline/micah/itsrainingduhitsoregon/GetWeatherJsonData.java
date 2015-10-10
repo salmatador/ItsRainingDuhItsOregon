@@ -2,7 +2,6 @@ package kline.micah.itsrainingduhitsoregon;
 
 
 import android.net.Uri;
-import android.support.v4.util.Pair;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -31,6 +30,7 @@ public class GetWeatherJsonData extends GetData {
     final String WEATHER_MODE = "mode";
     final String WEATHER_UNITS = "units";
     final String WEATHER_COUNT = "cnt";
+    final String APPID = "APPID";
 
     public List<Weather> getWeatherList() {
         return mWeatherList;
@@ -55,7 +55,9 @@ public class GetWeatherJsonData extends GetData {
         Log.v("LOG", mUri.toString());
     }
 
-    public void buildForecastURL() {
+    public void buildForecastURL(String APPID_KEY) {
+
+
         mUri = Uri.parse(WEATHER_BASE_URL)
                 .buildUpon()
                 .appendPath(WEATHER_FORECAST)
@@ -64,6 +66,7 @@ public class GetWeatherJsonData extends GetData {
                 .appendQueryParameter(WEATHER_MODE, "json")
                 .appendQueryParameter(WEATHER_UNITS, "metric")
                 .appendQueryParameter(WEATHER_COUNT, "16")
+                .appendQueryParameter(APPID, APPID_KEY)
                 .build();
 
 

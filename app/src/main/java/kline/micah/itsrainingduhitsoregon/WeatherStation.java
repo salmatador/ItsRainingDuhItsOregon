@@ -35,6 +35,10 @@ public class WeatherStation {
         mWeather.addAll(weatherList);
     }
 
+    public void update(Weather weather, int index) {
+        mWeather.set(index, weather);
+    }
+
     public void add(Weather weather) {
         mWeather.add(weather);
     }
