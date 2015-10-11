@@ -1,4 +1,4 @@
-package kline.micah.itsrainingduhitsoregon;
+package kline.micah.itsrainingduhitsoregon.model;
 
 import android.os.AsyncTask;
 import android.util.Log;
