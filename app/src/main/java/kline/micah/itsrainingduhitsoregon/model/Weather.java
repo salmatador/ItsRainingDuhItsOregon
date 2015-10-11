@@ -13,12 +13,14 @@ public class Weather {
     private double mMinTemp;
     private double mMaxTemp;
     private UUID mId;
+    private WeatherStation weatherStation;
 
     public Weather(String mainWeather, Double highTemp, Double lowTemp) {
         mId = UUID.randomUUID();
         mMainWeather = mainWeather;
         mMaxTemp = highTemp;
         mMinTemp = lowTemp;
+        weatherStation = WeatherStation.get(null);
     }
 
     public String getMainWeather() {
@@ -26,11 +28,20 @@ public class Weather {
     }
 
     public double getMinTemp() {
-        return Math.round(mMinTemp);
+        if (weatherStation != null && weatherStation.isCelsius()) {
+            return Math.round(mMinTemp);
+        } else {
+            return getMinTempF();
+        }
     }
 
     public double getMaxTemp() {
-        return Math.round(mMaxTemp);
+        if (weatherStation != null && weatherStation.isCelsius()) {
+            return Math.round(mMaxTemp);
+        } else {
+            return getMaxTempF();
+        }
+
     }
 
     public double getMinTempF() {
@@ -43,7 +54,7 @@ public class Weather {
 
     @Override
     public String toString() {
-        return getMainWeather() + " - " + getMaxTempF() + " - " + getMinTempF();
+        return getMainWeather() + " - " + getMaxTemp() + " - " + getMinTemp();
     }
 
     public UUID getId() {

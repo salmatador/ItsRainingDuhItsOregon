@@ -24,6 +24,13 @@
             android:label="@string/title_activity_weather_pager"
             android:parentActivityName=".controller.WeatherListActivity">
         </activity>
+        <activity
+            android:name=".controller.WeatherSettingsActivity"
+            android:label="WeatherSettings"
+            android:parentActivityName=".controller.WeatherListActivity">
+
+        </activity>
+
     </application>
 
 </manifest>

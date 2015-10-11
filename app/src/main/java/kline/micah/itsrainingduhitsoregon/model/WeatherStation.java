@@ -1,10 +1,13 @@
 package kline.micah.itsrainingduhitsoregon.model;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import kline.micah.itsrainingduhitsoregon.R;
 
 /**
  * Created by desktop on 10/7/2015.
@@ -14,8 +17,11 @@ public class WeatherStation {
 
     private static WeatherStation sWeatherStation;
     private List<Weather> mWeather;
+    private boolean mIsCelsius;
+    private Context mContext;
 
     private WeatherStation(Context context) {
+        mContext = context;
         mWeather = new ArrayList<>();
     }
 
@@ -33,6 +39,21 @@ public class WeatherStation {
     public void setWeather(List<Weather> weatherList) {
         mWeather.clear();
         mWeather.addAll(weatherList);
+    }
+
+    public void setCelsius(String string) {
+        Log.e("INSIDE SET CEslsius", string);
+        if (string.equals(mContext.getResources().getString(R.string.pref_units_metric))) {
+            Log.e("CELSIUS = METRIC", string);
+            mIsCelsius = true;
+
+        } else {
+            mIsCelsius = false;
+        }
+    }
+
+    public boolean isCelsius() {
+        return mIsCelsius;
     }
 
     public void update(Weather weather, int index) {
